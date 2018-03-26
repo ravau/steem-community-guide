@@ -31,7 +31,9 @@ $data = data_form($wbazie);
 
 <div id="tagcloud" class="label">
 <?php
+
 echo "<h3>".ucfirst(strftime("%B %Y",strtotime($data))).":</h3>";
+
 ?>
 
 
@@ -46,24 +48,16 @@ echo "<h3>".ucfirst(strftime("%B %Y",strtotime($data))).":</h3>";
 
 <?php
 
-
 $tree = json_decode(file_get_contents("data/tree-$data.json"), true);
-
-//ksort($tree);
-//shuffle_assoc($tags);
 $tree = array_unique($tree);
 
 foreach ($tree as $val)
-	{
-			//eliminate functional tags
-			$val = str_replace("pl-artykuly","",$val);
-			echo "['$val'],\n";
+{
+	//eliminate functional tags
+	$val = str_replace("pl-artykuly","",$val);
+	echo "['$val'],\n";
 		
-	}
-
-//echo "<br/><pre>";
-//print_r($tree);
-//echo "</pre>";
+}
 
 ?>
 						]
@@ -96,15 +90,6 @@ foreach ($tree as $val)
 </p>
 <br />
 </div>
-
-
-<?php
-
-//echo $average = array_sum($tags)/count($tags);
-
-?>
-
-
 
 </div>
 </section>

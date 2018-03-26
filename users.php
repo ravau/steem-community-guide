@@ -26,7 +26,7 @@ $data2 = date('Y-m', strtotime("-1 months", strtotime($data)));
 
 
 <?php
-//dodac wykres przyrostu userow w czasie
+//charts of users growth etc
 
 
 if($_POST['data'] != "all" && $_POST['data'] != "")
@@ -80,7 +80,7 @@ Dane aktualne do daty: <?php echo $wbazie;?>
 
 									echo ">";
 									
-									//link - przejscie do profilu usera juz live mysql
+									//link - user profile - live mysql OR php API (better)
 									echo "<td>".($i+1)."</td><td>$key</td><td>$val</td></tr>";
 									
 									$i++;

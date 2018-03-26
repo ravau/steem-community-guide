@@ -1,24 +1,25 @@
 <?php
 //Cron updating data
-
-// funkcje + uporzadkowac kod
+//
+//dev note - make functions
+//
 
 require_once("config.php");
 
 $polaczenie = mysql_connect($mysql_host,$mysql_user,$mysql_password);
 
-//brak polaczenia nie wyswietlaj strony?
+//if connection right
 if (!$polaczenie) 
 	{
     die('not connected : ' . mysql_error());
 	}
 	else
 		{
-			//ok, wybierz baze
+			//ok, choose the base
 			mysql_select_db($mysql_database);
 			mysql_query("set names 'utf8'");
 			
-			//jaki jest ostatni blok w bazie? / dostawcy bazy lubia sie desynchronizowac :( /
+			//last Steem block in the base? - many bases are often not synchronised :(
 			$res = mysql_query("
 			select timestamp
 			from sbds_tx_comments
@@ -35,37 +36,34 @@ if (!$polaczenie)
 				echo "</pre>";
 				}
 	
-			//pierwszy wpis na steemit mial miejsce 30 marca 2016, sprawdzamy wiêc istnienie cache od kwietnia 2016
+			//first Steem block with post happened 30 march 2016, so check our cache from april 2016 when more common posting started
 			$start = "2016-04";
 			$today = date("Y-m");
 			$done = 0;
 			
-			while($done!=1)  //tylko jeden mc analizuj na raz
+			while($done!=1)  //one month at time (cron.php run)
 			{
-
-				//ktory miesiac uaktualnic? - sprawdz ostatni wpis - timestamp + aktualny miesiac + od poczatku istnienia steem w folderze data/tags
+				//which month? - check last, timestamp + month + from steem start in dir data/tags
 				$data = $start;
 				
-				while(file_exists("data/tags/$data.json") && $data != $today && date("Y-m",strtotime($data)) < date("Y-m",strtotime($wbazie))) //current month nadpisuj dopoki sie nie skonczy AND ostatni blok w bazie aktualny!!!
+				while(file_exists("data/tags/$data.json") && $data != $today && date("Y-m",strtotime($data)) < date("Y-m",strtotime($wbazie))) //current month is overwritten always until the month ended and base block updated
 				{
 					$data = date('Y-m', strtotime("+1 months", strtotime($data)));
 				}
-				
 
-
-				//okres cachowania tagow
+				//tag caching period
 				$x = explode('-',$data);
 				$dni = date("t",mktime(0,0,0,$x[1],1,$x[0]));
-				echo "sprawdzam:";
+				echo "checking:";
 				echo $od = $data."-01";
 				echo $do = $data."-".$dni;
 
-				//pobierz poprzednie staty userow (addytywne)
+				//get last user data (user data is additive)
 				$poprzedni = date('Y-m', strtotime("-1 months", strtotime($data)));
 				$users = json_decode(file_get_contents("data/users-$poprzedni.json"), true); //or previous if same month is now
 				file_put_contents("data/users-previous.json", json_encode($users));
 
-				//wybierz tagi w jsonie z bazy, unikalny permlink 
+				//get tags from json from base, unique permlink 
 				$res = mysql_query("
 
 				SELECT json_metadata,author FROM (
@@ -87,7 +85,7 @@ if (!$polaczenie)
 						//print_r($row);
 						//echo "</pre>";
 						
-						//userzy post count
+						//users post count
 						$users[$row[1]] = $users[$row[1]] +1;
 						
 						$dane = json_decode($row[0], true);
@@ -105,7 +103,7 @@ if (!$polaczenie)
 						//tree category strings eg. with pl- where polish base
 						$i=0;
 						
-						if($dane['tags'][$i] == "polish") //jesli tag bazowy sie zgadza
+						if($dane['tags'][$i] == "polish") //if base tag compatible
 							{
 								
 								for($i=0;$i<count($dane['tags']);$i++)
@@ -128,16 +126,16 @@ if (!$polaczenie)
 				echo "</pre>";
 
 
-				//cache tagi
+				//cache tags
 				file_put_contents("data/tags/$data.json", json_encode($tagi));
 
-				//dodaj brakujacych users piszacy na polish
+				//add non existing users
 				file_put_contents("data/users-$data.json", json_encode($users));
 				
 				//add tree strings connected with prefix eg pl-
 				file_put_contents("data/tree-$data.json", json_encode($tree));
 			
-			$done = 1; //nieuzywany obecnie
+			$done = 1; //now not used
 			}
 		}
 ?>

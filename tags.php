@@ -35,16 +35,14 @@ echo "<h3>".ucfirst(strftime("%B %Y",strtotime($data))).":</h3>";
 $tags = json_decode(file_get_contents("data/tags/$data.json"), true);
 
 ksort($tags);
-//shuffle_assoc($tags);
 
-
-//prog wyswietlania tagu, srednia, sqrt sredniej?
+//activation level for showing tag in cloud? average, sqrt(floor(avg))
 $prog=floor(array_sum($tags)/count($tags));
 
 
 foreach ($tags as $key=>$val)
 	{
-		if($val >= $prog) //wziac mediane?
+		if($val >= $prog) //or median?
 		{
 			$ile = $val;
 			$val = sqrt(sqrt($val));
@@ -69,12 +67,6 @@ foreach ($tags as $key=>$val)
 <br />
 </div>
 
-
-<?php
-
-//echo $average = array_sum($tags)/count($tags);
-
-?>
 
 <script>
 $("#tagcloud a").tagcloud({

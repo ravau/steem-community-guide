@@ -1,6 +1,6 @@
 <?php
 
-//Longer execution time needed! Even 15 minutes in the background
+//Longer execution time needed! Even 15 minutes in the background if provider is slow
 ini_set('max_execution_time', 240);
 ini_set('mysql.connect_timeout', 200);
 ini_set('max_input_time', 200);
