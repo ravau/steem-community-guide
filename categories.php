@@ -51,12 +51,33 @@ echo "<h3>".ucfirst(strftime("%B %Y",strtotime($data))).":</h3>";
 $tree = json_decode(file_get_contents("data/tree-$data.json"), true);
 $tree = array_unique($tree);
 
+//at first categories ought to work without computing hierarchy, but it need cowork from posting people, so we need other weighting system, let's take tag popularity
+$tags = json_decode(file_get_contents("data/tags/$data.json"), true);
+
 foreach ($tree as $val)
 {
 	//eliminate functional tags
-	$val = str_replace("pl-artykuly","",$val);
-	echo "['$val'],\n";
+	$val = str_replace(" pl-artykuly","",$val);
+	$val = str_replace("  "," ",substr($val,1));
+	
+	//tag fequency 
+	$val = explode(" ",$val);
+	
+	for($i=0;$i<count($val);$i++)
+	{
+		$col[$val[$i]] = $tags[$val[$i]];
+	}
+	
+	arsort($col);
+	
+	$branch = implode(" ", array_keys($col));
+	
+	echo "['$branch'],\n";
+	
+	unset($branch);
+	unset($col);
 		
+	//the bigger the data the best, nonbiased results!
 }
 
 ?>
@@ -75,7 +96,7 @@ foreach ($tree as $val)
       }
     </script>
 
-		<div id="wordtree_basic" style="max-width: 1280px; height: 1280px;"></div>
+		<div id="wordtree_basic" style="max-width: 1280px; height: 1480px;"></div>
 
 
 
