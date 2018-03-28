@@ -34,4 +34,38 @@ while(date("Y-m",strtotime($today)) >= date("Y-m",strtotime($start)))
 
 return $data;
 }
+
+function array_mesh() {
+	// Combine multiple associative arrays and sum the values
+		
+	// Get the number of arguments being passed
+	$numargs = func_num_args();
+	
+	// Save the arguments to an array
+	$arg_list = func_get_args();
+	
+	// Create an array to hold the combined data
+	$out = array();
+
+	// Loop through each of the arguments
+	for ($i = 0; $i < $numargs; $i++) {
+		$in = $arg_list[$i]; // This will be equal to each array passed as an argument
+
+		// Loop through each of the arrays passed as arguments
+		foreach($in as $key => $value) {
+			// If the same key exists in the $out array
+			if(array_key_exists($key, $out)) {
+				// Sum the values of the common key
+				$sum = $in[$key] + $out[$key];
+				// Add the key => value pair to array $out
+				$out[$key] = $sum;
+			}else{
+				// Add to $out any key => value pairs in the $in array that did not have a match in $out
+				$out[$key] = $in[$key];
+			}
+		}
+	}
+	
+	return $out;
+}
 ?>
