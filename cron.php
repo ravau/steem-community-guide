@@ -5,6 +5,7 @@
 //
 
 require_once("config.php");
+require_once("_functions.php");
 
 $polaczenie = mysql_connect($mysql_host,$mysql_user,$mysql_password);
 
@@ -48,8 +49,16 @@ if (!$polaczenie)
 				
 				while(file_exists("data/tags/$data.json") && $data != $today && date("Y-m",strtotime($data)) < date("Y-m",strtotime($wbazie))) //current month is overwritten always until the month ended and base block updated
 				{
+					if($tagsall == "") //for first month
+						$tagsall = json_decode(file_get_contents("data/tags/$data.json"), true);
+					
+					//main counter
 					$data = date('Y-m', strtotime("+1 months", strtotime($data)));
+					
+					//cache tags alltogether
+					$tagsall = array_mesh($tagsall , json_decode(file_get_contents("data/tags/$data.json"), true));
 				}
+					
 
 				//tag caching period
 				$x = explode('-',$data);
@@ -128,14 +137,17 @@ if (!$polaczenie)
 
 				//cache tags
 				file_put_contents("data/tags/$data.json", json_encode($tagi));
-
+				
+				//cache tags alltogether
+				file_put_contents("data/tags/alltime.json", json_encode($tagsall));
+				
 				//add non existing users
 				file_put_contents("data/users-$data.json", json_encode($users));
 				
 				//add tree strings connected with prefix eg pl-
 				file_put_contents("data/tree-$data.json", json_encode($tree));
 			
-			$done = 1; //now not used
+			$done = 1; //one month at time
 			}
 		}
 ?>
