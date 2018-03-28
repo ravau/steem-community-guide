@@ -14,10 +14,9 @@ Sprawdźmy ideę hierarchi tagów na #polish.<br /><br />
 
 <form method="post" action="" class="forma">
 <br />
-<i>Wybierz datę**:</i> 
 
+<i>Wybierz datę**: </i> 
 <select name="data" onchange="this.form.submit()">
-
 <?php
 
 //select date + post formulas
@@ -25,6 +24,14 @@ $data = data_form($wbazie);
 
 ?>
 </select>
+
+<i>Drzewo: </i>
+<input value="1" name="big" type="checkbox" onchange="this.form.submit()" <?php if($_POST['big']==1) 
+		echo " checked=\"checked\" "; ?>> <i>- gigant </i>
+		
+<input value="1" name="density" type="checkbox" onchange="this.form.submit()" <?php if($_POST['density']==1) 
+		echo " checked=\"checked\" "; ?>> <i>- więcej gałęzi</i>
+
 <br /><br />
 </form>
 
@@ -52,7 +59,7 @@ $tree = json_decode(file_get_contents("data/tree-$data.json"), true);
 $tree = array_unique($tree);
 
 //at first categories ought to work without computing hierarchy, but it need cowork from posting people, so we need other weighting system, let's take tag popularity
-$tags = json_decode(file_get_contents("data/tags/$data.json"), true);
+$tags = json_decode(file_get_contents("data/tags/alltime.json"), true);
 
 foreach ($tree as $val)
 {
@@ -72,7 +79,14 @@ foreach ($tree as $val)
 	
 	$branch = implode(" ", array_keys($col));
 	
-	echo "['$branch'],\n";
+	//tree density, eg omit strong with only 2 branches, show min 3
+	if($_POST['density'] == 1)
+		$threshold = 0;
+			else
+			 $threshold = 2;
+	
+	if(count($col)>$threshold)
+		echo "['$branch'],\n";
 	
 	unset($branch);
 	unset($col);
@@ -96,7 +110,7 @@ foreach ($tree as $val)
       }
     </script>
 
-		<div id="wordtree_basic" style="max-width: 1280px; height: 1480px;"></div>
+		<div id="wordtree_basic" style="<?php if($_POST['big'] == 1) echo "max-width: 1480px; height: 2480px;"; else echo "max-width: 1280px; height: 1480px;";?>"></div>
 
 
 
