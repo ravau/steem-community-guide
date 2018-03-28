@@ -4,7 +4,7 @@
 //dev note - make functions
 //
 
-require_once("config.php");
+require_once("_config.php");
 require_once("_functions.php");
 
 $polaczenie = mysql_connect($mysql_host,$mysql_user,$mysql_password);
