@@ -11,7 +11,7 @@
 					Potrzebujesz pomocy? Wejdź na nasz czat lub discord:</p>
           <ul class="list-inline list-social-icons mb-0">
             <li class="list-inline-item">
-              <a target="_blank" href="https://steemit.chat/channel/polish">
+              <a target="_blank" href="https://steem.chat/channel/polish">
                 <span class="fa-stack fa-lg">
                   <i class="fa fa-circle fa-stack-2x"></i>
                   <i class="fab fa-rocketchat fa-stack-1x fa-inverse"></i>
