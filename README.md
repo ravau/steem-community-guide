@@ -8,10 +8,10 @@ Site for local community based on Steem blockchain, useful for exploring tags, s
 
 ## LIVE BETA
 Working beta for #polish Steem community here: 
-> http://steem.swhost.pl/ - **Polish Steem Community Guide**
-- http://steem.swhost.pl/tags - tag cloud & pl-% (specific polish tags)
-- http://steem.swhost.pl/categories - tag tree graph
-- http://steem.swhost.pl/users - users activity
+> https://steemweb.pl/ - **Polish Steem Community Guide**
+- https://steemweb.pl/tags - tag cloud & pl-% (specific polish tags)
+- https://steemweb.pl/categories - tag tree graph
+- https://steemweb.pl/users - users activity
 
 ## HOW TO
 - use config.php to set connection to chosen Sbds Steem mysql database
