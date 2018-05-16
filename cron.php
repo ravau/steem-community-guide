@@ -136,6 +136,8 @@ if (!$polaczenie)
 
 
 				//cache tags
+				if(!empty($tagi) && !empty($tagsall) && !empty($users)  && !empty($tree))
+				{
 				file_put_contents("data/tags/$data.json", json_encode($tagi));
 				
 				//cache tags alltogether
@@ -146,6 +148,7 @@ if (!$polaczenie)
 				
 				//add tree strings connected with prefix eg pl-
 				file_put_contents("data/tree-$data.json", json_encode($tree));
+				}
 			
 			$done = 1; //one month at time
 			}
